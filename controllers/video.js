@@ -83,34 +83,40 @@ const videoUpload = asyncHandler(async (req, res, next) => {
   const nameForThumbnail = `thumb-${videoModel._id}${
     path.parse(thumbnail.name).ext
   }`;
-  cloudinary.v2.uploader.upload(
-    filePath,
-    {
-      resource_type: "video",
-      public_id: nameForVideo,
-      overwrite: true,
-    },
-    async function (error, result) {
-      if (error)
-        return res.status(402).json({
-          success: false,
-          message: error.message,
-        });
-      thumbnail.mv(`${process.env.FILE_UPLOAD_PATH}/${nameForThumbnail}`);
-      videoModel = await Video.findByIdAndUpdate(
-        videoModel._id,
-        {
-          url: result.secure_url,
-          title: title,
-          thumbnailUrl: nameForThumbnail,
-          description: req.body.description,
-        },
-        { new: true, runValidators: true }
-      );
+  try {
+    cloudinary.v2.uploader.upload(
+      filePath,
+      {
+        resource_type: "video",
+        public_id: nameForVideo,
+        overwrite: true,
+      },
+      async function (error, result) {
+        if (error)
+          return res.status(402).json({
+            success: false,
+            message: error.message,
+          });
+        thumbnail.mv(`${process.env.FILE_UPLOAD_PATH}/${nameForThumbnail}`);
+        videoModel = await Video.findByIdAndUpdate(
+          videoModel._id,
+          {
+            url: result.secure_url,
+            title: title,
+            thumbnailUrl: nameForThumbnail,
+            description: req.body.description,
+          },
+          { new: true, runValidators: true }
+        );
 
-      res.status(200).json({ message: "Successfully Uploaded", success: true });
-    }
-  );
+        res
+          .status(200)
+          .json({ message: "Successfully Uploaded", success: true });
+      }
+    );
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // @desc    Update video
