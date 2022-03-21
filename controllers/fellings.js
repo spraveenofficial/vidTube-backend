@@ -28,25 +28,37 @@ const createFeeling = asyncHandler(async (req, res, next) => {
     videoId,
     userId,
   });
-
+  console.log(feeling);
   if (!feeling) {
     feeling = await Feeling.create({
       type,
       videoId,
       userId,
     });
-    return res.status(200).json({ success: true, data: feeling });
+    if (type === "like") {
+      return res
+        .status(200)
+        .json({ success: true, data: { liked: true, disliked: false } });
+    } else {
+      return res
+        .status(200)
+        .json({ success: true, data: { liked: false, disliked: true } });
+    }
   }
   // else - check req.body.feeling if equals to feeling.type remove
   if (type == feeling.type) {
     await feeling.remove();
-    return res.status(200).json({ success: true, data: "Unliked" });
+    return res
+      .status(200)
+      .json({ success: true, data: { liked: false, disliked: false } });
   }
   // else - change feeling type
   feeling.type = type;
   feeling = await feeling.save();
 
-  res.status(200).json({ success: true, data: feeling });
+  return res
+    .status(200)
+    .json({ success: true, data: { liked: false, disliked: true } });
 });
 
 // @desc    Check feeling
@@ -59,11 +71,15 @@ const checkFeeling = asyncHandler(async (req, res, next) => {
     userId: id,
   });
   if (!feeling) {
-    return res.status(200).json({ success: true, data: feeling });
+    return res
+      .status(200)
+      .json({ success: true, data: { liked: false, disliked: false } });
   }
-  return res
-    .status(200)
-    .json({ success: true, data: { feeling: feeling.type } });
+  const dataTobeSent = {
+    liked: feeling.type === "like",
+    disliked: feeling.type === "dislike",
+  };
+  return res.status(200).json({ success: true, data: dataTobeSent });
 });
 
 // @desc    Get liked videos

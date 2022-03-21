@@ -5,7 +5,6 @@ import {
   getVideo,
   videoUpload,
   updateVideo,
-  updateViews,
   uploadVideoThumbnail,
   deleteVideo,
 } from "../controllers/video.js";
@@ -26,7 +25,7 @@ router.route("/private").get(
       { path: "categoryId" },
       { path: "likes" },
       { path: "dislikes" },
-      { path: "comments" },
+      // { path: "comments" },
     ],
     {
       status: "private",

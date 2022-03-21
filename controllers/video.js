@@ -25,7 +25,6 @@ const getVideos = asyncHandler(async (req, res, next) => {
 const getVideo = asyncHandler(async (req, res, next) => {
   try {
     const video = await Video.findById(req.params.id)
-      // How to get true false isLiked and isDisliked
       .populate({
         path: "categoryId",
       })
@@ -42,11 +41,7 @@ const getVideo = asyncHandler(async (req, res, next) => {
         new ErrorResponse(`No video with that id of ${req.params.id}`)
       );
     } else {
-      const feeling = await Feeling.findOne({
-        videoId: video.id,
-        userId: req.params.id,
-      });
-      res.status(200).json({ sucess: true, data: video, feeling });
+      res.status(200).json({ sucess: true, data: video });
       updateViews(req.params.id);
     }
   } catch (error) {

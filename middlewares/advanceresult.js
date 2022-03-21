@@ -4,12 +4,11 @@ const advancedResults =
   (model, populates, visibility = { status: "", filter: "" }) =>
   async (req, res, next) => {
     let query;
-    console.log(visibility);
     if (visibility.status == "private") {
-      req.query.userId = req.user._id;
+      req.query.userId = req.data.id;
 
       if (visibility.filter == "channel") {
-        req.query.channelId = req.user._id;
+        req.query.channelId = req.data.id;
         delete req.query.userId;
       }
     } else if (visibility.status == "public") {
