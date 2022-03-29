@@ -5,7 +5,7 @@ import Video from "../models/video.js";
 import Subscription from "../models/subscription.js";
 
 // @desc    Get all subscribers
-// @route   GET /api/v1/subscriptions/subscribers
+// @route   GET /api/v1/subscriptions
 // @access  Private
 const getSubscribers = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
@@ -16,6 +16,8 @@ const getSubscribers = asyncHandler(async (req, res, next) => {
 // @access  Private
 const getChannels = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
+  // const { id } = req.data;
+  // console.log(id);
 });
 
 // @desc    Check subscription

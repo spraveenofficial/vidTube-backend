@@ -19,7 +19,7 @@ router.post("/check", protect, checkSubscription);
 router.route("/subscribers").get(
   protect,
   advancedResults(Subscription, [{ path: "subscriberId" }], {
-    status: "private",
+    status: "public",
     filter: "channel",
   }),
   getSubscribers
@@ -28,6 +28,7 @@ router.route("/subscribers").get(
 router
   .route("/channels")
   .get(
+    protect,
     advancedResults(Subscription, [
       { path: "channelId", select: "photoUrl channelName" },
     ]),

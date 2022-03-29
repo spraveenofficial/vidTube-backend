@@ -3,7 +3,9 @@
 const advancedResults =
   (model, populates, visibility = { status: "", filter: "" }) =>
   async (req, res, next) => {
+    console.log(visibility);
     let query;
+
     if (visibility.status == "private") {
       req.query.userId = req.data.id;
 
