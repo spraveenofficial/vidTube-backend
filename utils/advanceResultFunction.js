@@ -7,7 +7,6 @@ const advanceResultFunction = async (
   or = []
 ) => {
   req.query.status = status;
-  console.log(req.query);
   const reqQuery = { ...req.query };
 
   const removeFields = ["select", "sort", "page", "limit"];
@@ -20,7 +19,6 @@ const advanceResultFunction = async (
   );
 
   var query = model.find(JSON.parse(queryStr));
-
   if (or) {
     query = query.or(or);
   }

@@ -92,11 +92,12 @@ const getLikedVideos = asyncHandler(async (req, res, next) => {
     type: "like",
   });
   if (likes.length === 0)
-    return res.status(200).json({ success: true, data: {} });
+    return res.status(404).json({ success: true, data: {} });
 
   const videosId = likes.map((video) => {
     return {
       _id: video.videoId.toString(),
+      likedAt: video.createdAt.toString(),
     };
   });
   const populates = [{ path: "userId", select: "photoUrl channelName" }];
