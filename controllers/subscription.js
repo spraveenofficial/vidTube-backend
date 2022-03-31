@@ -41,11 +41,10 @@ const checkSubscription = asyncHandler(async (req, res, next) => {
     channelId: req.body.channelId,
     subscriberId: id,
   });
-  console.log(channel);
   if (!channel) {
-    return res.status(200).json({ success: true, data: {} });
+    return res.status(200).json({ success: true, isSubscribed: false });
   }
-  return res.status(200).json({ success: true, data: channel });
+  return res.status(200).json({ success: true, isSubscribed: true });
 });
 
 // @desc    Create subscriber
@@ -55,7 +54,7 @@ const createSubscriber = asyncHandler(async (req, res, next) => {
   const { id } = req.data;
   const { channelId } = req.body;
   if (channelId.toString() == id.toString()) {
-    return next(new ErrorResponse(`You can't subscribe to your own channle`));
+    return next(new ErrorResponse(`You can't subscribe to your own channel`));
   }
   let subscription = await Subscription.findOne({
     channelId: channelId,
@@ -64,15 +63,14 @@ const createSubscriber = asyncHandler(async (req, res, next) => {
 
   if (subscription) {
     await subscription.remove();
-    return res.status(200).json({ success: true, data: {} });
+    return res.status(200).json({ success: true, subscribed: false });
   } else {
     subscription = await Subscription.create({
       subscriberId: req.data.id,
       channelId: channelId,
     });
+    return res.status(200).json({ success: true, subscribed: true });
   }
-
-  res.status(200).json({ success: true, data: subscription });
 });
 
 // @desc    Get subscribed videos

@@ -4,7 +4,7 @@ import ErrorResponse from "../utils/error.js";
 import advanceResultFunction from "../utils/advanceResultFunction.js";
 import Video from "../models/video.js";
 import Feeling from "../models/feeling.js";
-
+import Subscription from "../models/subscription.js";
 // @desc    Create feeling
 // @route   POST /api/v1/feelings/
 // @access  Private
@@ -66,6 +66,7 @@ const createFeeling = asyncHandler(async (req, res, next) => {
 // @access  Private
 const checkFeeling = asyncHandler(async (req, res, next) => {
   const { id } = req.data;
+  const channelFrom = await Video.findOne({ id }).populate("userId");
   const feeling = await Feeling.findOne({
     videoId: req.body.videoId,
     userId: id,
@@ -74,12 +75,18 @@ const checkFeeling = asyncHandler(async (req, res, next) => {
     return res
       .status(200)
       .json({ success: true, data: { liked: false, disliked: false } });
+  } else {
+    const channel = await Subscription.findOne({
+      channelId: channelFrom.userId.id,
+      subscriberId: id,
+    });
+    const dataTobeSent = {
+      liked: feeling.type === "like",
+      disliked: feeling.type === "dislike",
+      isSubscribed: !!channel,
+    };
+    return res.status(200).json({ success: true, data: dataTobeSent });
   }
-  const dataTobeSent = {
-    liked: feeling.type === "like",
-    disliked: feeling.type === "dislike",
-  };
-  return res.status(200).json({ success: true, data: dataTobeSent });
 });
 
 // @desc    Get liked videos
