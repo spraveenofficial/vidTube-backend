@@ -29,9 +29,11 @@ router
   .route("/channels")
   .get(
     protect,
-    advancedResults(Subscription, [
-      { path: "channelId", select: "photoUrl channelName" },
-    ]),
+    advancedResults(
+      Subscription,
+      [{ path: "channelId", select: "photoUrl channelName" }],
+      { status: "subscriptions" }
+    ),
     getChannels
   );
 

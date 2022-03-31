@@ -1,11 +1,8 @@
-// @eg      channelName=reagan&select=email&sort=-channelName,email
-
 const advancedResults =
   (model, populates, visibility = { status: "", filter: "" }) =>
   async (req, res, next) => {
-    console.log(visibility);
     let query;
-
+    console.log(visibility);
     if (visibility.status == "private") {
       req.query.userId = req.data.id;
 
@@ -15,8 +12,10 @@ const advancedResults =
       }
     } else if (visibility.status == "public") {
       req.query.status = "public";
+    } else if (visibility.status == "subscriptions") {
+      req.query.subscriberId = req.data.id;
     }
-
+    // console.log(query);
     const reqQuery = { ...req.query };
 
     const removeFields = ["select", "sort", "page", "limit"];

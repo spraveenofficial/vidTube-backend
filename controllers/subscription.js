@@ -15,9 +15,21 @@ const getSubscribers = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/subscriptions/channels
 // @access  Private
 const getChannels = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
   // const { id } = req.data;
-  // console.log(id);
+  // const subscriptions = await Subscription.find({ subscriberId: id });
+  res.status(200).json(res.advancedResults);
+  // const channels = await Subscription.find({ subscriberId: id }).populate({
+  //   path: "channelId",
+  //   select: "channelName email",
+  // });
+  // if (!channels || channels.length === 0) {
+  //   return res.json({
+  //     success: true,
+  //     statusCode: 401,
+  //     message: "You have not subscribed to Any channel.",
+  //   });
+  // }
+  // return res.status(200).json(channels);
 });
 
 // @desc    Check subscription
