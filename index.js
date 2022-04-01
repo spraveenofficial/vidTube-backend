@@ -10,7 +10,7 @@ import fileUpload from "express-fileupload";
 import videoRoute from "./routes/video.js";
 import feelingRoutes from "./routes/feelings.js";
 import SubscriptionROutes from "./routes/subscription.js";
-
+import PlayListRoutes from "./routes/playlist.js";
 // This is solution for __dirname in ES6
 const __dirname = path.resolve();
 const app = express();
@@ -40,6 +40,7 @@ app.use("/v1/api/auth", authRoutes);
 app.use("/v1/api/video", videoRoute);
 app.use("/v1/api/feelings", feelingRoutes);
 app.use("/v1/api/subscription", SubscriptionROutes);
+app.use("/v1/api/playlist", PlayListRoutes);
 app.get("/test", (req, res) => {
   res.sendFile("index.html", { root: __dirname });
 });
