@@ -17,7 +17,10 @@ router.use(middleware);
 
 router
   .route("/")
-  .get(advancedResults(Playlist, [{ path: "videos" }]), getPlaylists);
+  .get(
+    advancedResults(Playlist, [{ path: "videos" }], { status: "private" }),
+    getPlaylists
+  );
 router.route("/create").post(createPlaylist);
 router.route("/update/:playlistId").put(updatePlaylist);
 router.route("/addVideo/:playlistId/:videoId").put(addVideo);
