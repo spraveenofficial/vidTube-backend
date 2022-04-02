@@ -15,17 +15,17 @@ const fetchHistory = async (req, res) => {
 const createHistory = async (req, res) => {
   const { video } = req.body;
   const { id } = req.data;
-  const checkIfExits = await History.findOne({ userId: id, videos: video });
+  const checkIfExits = await History.findOne({ user: id });
   if (checkIfExits) {
     const history = await History.findOneAndUpdate(
-      { userId: id, videos: video },
+      { user: id },
       { $push: { videos: video } },
       { new: true }
     );
     res.status(201).send(history);
   } else {
     const createHistory = new History({
-      userId: id,
+      user: id,
       videos: [video],
     });
     try {

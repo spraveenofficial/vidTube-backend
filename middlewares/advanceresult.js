@@ -13,8 +13,10 @@ const advancedResults =
       req.query.status = "public";
     } else if (visibility.status == "subscriptions") {
       req.query.subscriberId = req.data.id;
+    } else if (visibility.status == "history") {
+      req.query.user = req.data.id;
     }
-    // console.log(query);
+    console.log(query);
     const reqQuery = { ...req.query };
 
     const removeFields = ["select", "sort", "page", "limit"];
@@ -37,7 +39,7 @@ const advancedResults =
       const sortBy = req.query.sort.split(",").join(" ");
       query = query.sort(sortBy);
     } else {
-      query = query.sort({ createdAt: -1 });
+      query = query.sort({ updatedAt: -1 });
       // '-createdAt'
     }
 

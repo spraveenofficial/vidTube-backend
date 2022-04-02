@@ -16,7 +16,7 @@ router.route("/").post(createHistory);
 router
   .route("/")
   .get(
-    advancedResults(History, [{ path: "videos" }], { status: "private" }),
+    advancedResults(History, [{ path: "videos" }], { status: "history" }),
     fetchHistory
   );
 router.route("/").delete(deleteHistory);
