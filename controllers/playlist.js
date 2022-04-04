@@ -49,7 +49,7 @@ const updatePlaylist = async (req, res) => {
 };
 
 // @desc    Add Video to Existing playlist
-// @route   GET /api/v1/playlist/addVideo/:playlistId/:videoId
+// @route   PUT /api/v1/playlist/addVideo/:playlistId/:videoId
 // @access  Private
 
 const addVideo = async (req, res) => {
