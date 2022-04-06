@@ -53,6 +53,7 @@ const getVideo = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/video
 // @access  Private
 const videoUpload = asyncHandler(async (req, res, next) => {
+  console.log("video upload started.");
   const { id } = req.data;
   const file = req.files;
   const filePath = file.file.tempFilePath;
