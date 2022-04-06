@@ -12,6 +12,7 @@ import feelingRoutes from "./routes/feelings.js";
 import SubscriptionROutes from "./routes/subscription.js";
 import PlayListRoutes from "./routes/playlist.js";
 import HistoryRoutes from "./routes/history.js";
+
 // This is solution for __dirname in ES6
 const __dirname = path.resolve();
 const app = express();
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "/tmp/",
+    tempFileDir: "/tmp",
   })
 );
 // Registering morgan for development
