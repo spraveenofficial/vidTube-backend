@@ -16,6 +16,10 @@ const VideoSchema = new Schema(
       type: String,
       default: "no-photo.jpg",
     },
+    duration: {
+      type: Number,
+      default: 0,
+    },
     views: {
       type: Number,
       default: 0,

@@ -4,8 +4,8 @@ import asyncHandler from "../middlewares/async.js";
 import ErrorResponse from "../utils/error.js";
 import cloudinary from "cloudinary";
 import Video from "../models/video.js";
-import Feeling from "../models/feeling.js";
-
+import UploadServices from "../services/upload.js";
+import { getVideoDurationInSeconds } from "get-video-duration";
 cloudinary.config({
   cloud_name: "dtswa0rzu",
   api_key: "635545176889491",
@@ -53,7 +53,6 @@ const getVideo = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/video
 // @access  Private
 const videoUpload = asyncHandler(async (req, res, next) => {
-  console.log("video upload started.");
   const { id } = req.data;
   const file = req.files;
   const filePath = file.file.tempFilePath;
@@ -62,6 +61,7 @@ const videoUpload = asyncHandler(async (req, res, next) => {
   if (!video.mimetype.startsWith("video")) {
     return next(new ErrorResponse(`Please upload a video`, 404));
   }
+
   if (video.size > process.env.MAX_FILE_UPLOAD * 5) {
     return next(
       new ErrorResponse(
@@ -72,45 +72,41 @@ const videoUpload = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  let videoModel = await Video.create({ userId: id });
-  const title = req.body.title;
-  const nameForVideo = `video-${videoModel._id}${path.parse(video.name).ext}`;
-  const nameForThumbnail = `thumb-${videoModel._id}${
-    path.parse(thumbnail.name).ext
-  }`;
-  try {
-    cloudinary.v2.uploader.upload(
-      filePath,
-      {
-        resource_type: "video",
-        public_id: nameForVideo,
-        overwrite: true,
-      },
-      async function (error, result) {
-        if (error)
-          return res.status(402).json({
-            success: false,
-            message: error.message,
-          });
-        thumbnail.mv(`${process.env.FILE_UPLOAD_PATH}/${nameForThumbnail}`);
-        videoModel = await Video.findByIdAndUpdate(
-          videoModel._id,
-          {
-            url: result.secure_url,
-            title: title,
-            thumbnailUrl: nameForThumbnail,
-            description: req.body.description,
-          },
-          { new: true, runValidators: true }
-        );
 
-        res
-          .status(200)
-          .json({ message: "Successfully Uploaded", success: true });
-      }
+  if (!thumbnail.mimetype.startsWith("image")) {
+    return next(new ErrorResponse(`Please upload an image for thumbnail`, 404));
+  }
+  // Transform thumbnail to base64 format
+  const buffer = await fs.readFileSync(thumbnail.tempFilePath);
+  const base64data = buffer.toString("base64");
+  const dataToUpload = `data:${thumbnail.mimetype};base64,${base64data}`;
+  const thumbnailPath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+  const duration = await getVideoDurationInSeconds(filePath);
+  const videoPath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+  try {
+    const uploadVideo = await UploadServices.uploadVideo(filePath, videoPath);
+    const uploadThumbnail = await UploadServices.uploadThumbnail(
+      dataToUpload,
+      thumbnailPath
     );
-  } catch (err) {
-    return res.status(400).json({ success: false, error: err.message });
+
+    if (!uploadThumbnail || !uploadVideo) {
+      return next(new ErrorResponse(`Video Upload Failed.`, 404));
+    } else {
+      const pushVideo = await Video.create({
+        title: req.body.title,
+        description: req.body.description,
+        thumbnailUrl: uploadThumbnail,
+        url: uploadVideo,
+        categoryId: req.body.categoryId,
+        userId: id,
+        duration,
+      });
+      res.status(201).json({ success: true, data: pushVideo });
+    }
+  } catch (error) {
+    console.log(error);
+    return next(new ErrorResponse(`Video Upload Failed.`, 404));
   }
 });
 

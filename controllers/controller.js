@@ -84,7 +84,6 @@ class Controller {
         email: user.email,
         photoUrl: user.photoUrl,
       },
-      address: user.address,
     });
   }
 }

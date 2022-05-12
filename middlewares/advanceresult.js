@@ -16,7 +16,6 @@ const advancedResults =
     } else if (visibility.status == "history") {
       req.query.user = req.data.id;
     }
-    console.log(query);
     const reqQuery = { ...req.query };
 
     const removeFields = ["select", "sort", "page", "limit"];

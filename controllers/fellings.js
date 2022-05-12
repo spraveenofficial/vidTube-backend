@@ -28,7 +28,6 @@ const createFeeling = asyncHandler(async (req, res, next) => {
     videoId,
     userId,
   });
-  console.log(feeling);
   if (!feeling) {
     feeling = await Feeling.create({
       type,

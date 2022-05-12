@@ -37,6 +37,8 @@ const PORT = process.env.PORT || 3505;
 
 // Giving Path for Sending Static Files like Images
 app.use("/v1/api", express.static(path.join(__dirname, "public")));
+
+
 // Registering Routes
 app.use("/v1/api/auth", authRoutes);
 app.use("/v1/api/video", videoRoute);
@@ -44,8 +46,6 @@ app.use("/v1/api/feelings", feelingRoutes);
 app.use("/v1/api/subscription", SubscriptionROutes);
 app.use("/v1/api/playlist", PlayListRoutes);
 app.use("/v1/api/history", HistoryRoutes);
-app.get("/test", (req, res) => {
-  res.sendFile("index.html", { root: __dirname });
-});
+
 // Server initialize
 app.listen(PORT, () => console.log(`App started running on ${PORT}`));
