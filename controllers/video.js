@@ -5,7 +5,7 @@ import ErrorResponse from "../utils/error.js";
 import cloudinary from "cloudinary";
 import Video from "../models/video.js";
 import UploadServices from "../services/upload.js";
-import { getVideoDurationInSeconds } from "get-video-duration";
+// import { getVideoDurationInSeconds } from "get-video-duration";
 cloudinary.config({
   cloud_name: "dtswa0rzu",
   api_key: "635545176889491",
@@ -81,7 +81,8 @@ const videoUpload = asyncHandler(async (req, res, next) => {
   const base64data = buffer.toString("base64");
   const dataToUpload = `data:${thumbnail.mimetype};base64,${base64data}`;
   const thumbnailPath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-  const duration = await getVideoDurationInSeconds(filePath);
+  // Get video duration in seconds and convert it to minutes using getVideoDurationInSeconds without ffprobe
+  // const duration = await getVideoDurationInSeconds(filePath);
   const videoPath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
   try {
     const uploadVideo = await UploadServices.uploadVideo(filePath, videoPath);
@@ -100,7 +101,7 @@ const videoUpload = asyncHandler(async (req, res, next) => {
         url: uploadVideo,
         categoryId: req.body.categoryId,
         userId: id,
-        duration,
+        // duration,
       });
       res.status(201).json({ success: true, data: pushVideo });
     }
