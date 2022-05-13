@@ -12,11 +12,12 @@ import feelingRoutes from "./routes/feelings.js";
 import SubscriptionROutes from "./routes/subscription.js";
 import PlayListRoutes from "./routes/playlist.js";
 import HistoryRoutes from "./routes/history.js";
-
+import bodyParser from "body-parser";
 // This is solution for __dirname in ES6
 const __dirname = path.resolve();
 const app = express();
-app.use(express.urlencoded({ extended: false, limit: "100mb" }));
+app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser({ limit: "100mb" }));
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -32,7 +33,7 @@ app.use(
     origin: "*",
   })
 );
-app.use(express.json({ limit: "100mb" }));
+app.use(express.json());
 const PORT = process.env.PORT || 3505;
 
 // Giving Path for Sending Static Files like Images
