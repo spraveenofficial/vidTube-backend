@@ -16,7 +16,7 @@ import HistoryRoutes from "./routes/history.js";
 // This is solution for __dirname in ES6
 const __dirname = path.resolve();
 const app = express();
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false, limit: "100mb" }));
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -32,12 +32,11 @@ app.use(
     origin: "*",
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: "100mb" }));
 const PORT = process.env.PORT || 3505;
 
 // Giving Path for Sending Static Files like Images
 app.use("/v1/api", express.static(path.join(__dirname, "public")));
-
 
 // Registering Routes
 app.use("/v1/api/auth", authRoutes);

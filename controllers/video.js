@@ -101,7 +101,7 @@ const videoUpload = asyncHandler(async (req, res, next) => {
         url: uploadVideo,
         categoryId: req.body.categoryId,
         userId: id,
-        // duration,
+        duration: req.body.duration,
       });
       res.status(201).json({ success: true, data: pushVideo });
     }

@@ -38,7 +38,7 @@ const advancedResults =
       const sortBy = req.query.sort.split(",").join(" ");
       query = query.sort(sortBy);
     } else {
-      query = query.sort({ updatedAt: -1 });
+      query = query.sort({ createdAt: -1 });
       // '-createdAt'
     }
 
