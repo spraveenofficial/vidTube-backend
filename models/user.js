@@ -15,10 +15,6 @@ const UserSchema = new Schema(
       required: [true, "Please add an email"],
       unique: true,
       uniqueCaseInsensitive: true,
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        "Please add a valid email",
-      ],
     },
     photoUrl: {
       type: String,
@@ -59,7 +55,7 @@ UserSchema.virtual("videos", {
 });
 
 UserSchema.pre("find", function () {
-  this.populate({ path: "subscribers"});
+  this.populate({ path: "subscribers" });
 });
 
 // Ecrypt Password

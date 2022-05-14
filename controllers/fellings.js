@@ -1,5 +1,4 @@
 import asyncHandler from "../middlewares/async.js";
-// const asyncHandler = require("../middleware/async");
 import ErrorResponse from "../utils/error.js";
 import advanceResultFunction from "../utils/advanceResultFunction.js";
 import Video from "../models/video.js";
@@ -71,19 +70,20 @@ const checkFeeling = asyncHandler(async (req, res, next) => {
     videoId: req.body.videoId,
     userId: id,
   });
+  const notes = await Notes.findOne({
+    userId: id,
+    videoId: req.body.videoId,
+  }).select("notes");
   if (!feeling) {
-    return res
-      .status(200)
-      .json({ success: true, data: { liked: false, disliked: false } });
+    return res.status(200).json({
+      success: true,
+      data: { liked: false, disliked: false, notes: notes ? notes.notes : [] },
+    });
   } else {
     const channel = await Subscription.findOne({
       channelId: channelFrom.userId.id,
       subscriberId: id,
     });
-    const notes = await Notes.findOne({
-      videoId: req.body.videoId,
-      userId: id,
-    }).select("notes ");
     const dataTobeSent = {
       liked: feeling.type === "like",
       disliked: feeling.type === "dislike",
