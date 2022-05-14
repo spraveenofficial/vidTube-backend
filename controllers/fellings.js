@@ -5,6 +5,7 @@ import advanceResultFunction from "../utils/advanceResultFunction.js";
 import Video from "../models/video.js";
 import Feeling from "../models/feeling.js";
 import Subscription from "../models/subscription.js";
+import Notes from "../models/note.js";
 // @desc    Create feeling
 // @route   POST /api/v1/feelings/
 // @access  Private
@@ -79,10 +80,15 @@ const checkFeeling = asyncHandler(async (req, res, next) => {
       channelId: channelFrom.userId.id,
       subscriberId: id,
     });
+    const notes = await Notes.findOne({
+      videoId: req.body.videoId,
+      userId: id,
+    }).select("notes ");
     const dataTobeSent = {
       liked: feeling.type === "like",
       disliked: feeling.type === "dislike",
       isSubscribed: !!channel,
+      notes: notes ? notes.notes : [],
     };
     return res.status(200).json({ success: true, data: dataTobeSent });
   }

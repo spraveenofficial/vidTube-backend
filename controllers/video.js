@@ -5,7 +5,7 @@ import ErrorResponse from "../utils/error.js";
 import cloudinary from "cloudinary";
 import Video from "../models/video.js";
 import UploadServices from "../services/upload.js";
-// import { getVideoDurationInSeconds } from "get-video-duration";
+import Notes from "../models/note.js";
 cloudinary.config({
   cloud_name: "dtswa0rzu",
   api_key: "635545176889491",
@@ -224,6 +224,31 @@ const deleteVideo = asyncHandler(async (req, res, next) => {
   );
 });
 
+const addNotes = asyncHandler(async (req, res, next) => {
+  const { id } = req.data;
+  const { videoId } = req.body.notes;
+  const video = await Video.findById(videoId);
+  if (!video) {
+    return next(new ErrorResponse(`No video with id of ${videoId}`, 404));
+  }
+  const notes = await Notes.findOne({ videoId: videoId, userId: id });
+  if (notes) {
+    notes.notes.push({
+      note: req.body.notes.notes,
+      createdAt: req.body.notes.createdAt,
+    });
+    await notes.save();
+    return res.status(201).json({ success: true, data: notes });
+  }
+
+  const note = await Notes.create({
+    userId: id,
+    videoId: videoId,
+    notes: { note: req.body.notes.notes, createdAt: req.body.notes.createdAt },
+  });
+  res.status(201).json({ success: true, data: note });
+});
+
 export {
   getVideos,
   getVideo,
@@ -232,4 +257,5 @@ export {
   updateViews,
   uploadVideoThumbnail,
   deleteVideo,
+  addNotes,
 };

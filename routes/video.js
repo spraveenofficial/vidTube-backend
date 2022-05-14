@@ -7,6 +7,7 @@ import {
   updateVideo,
   uploadVideoThumbnail,
   deleteVideo,
+  addNotes,
 } from "../controllers/video.js";
 import advancedResults from "../middlewares/advanceresult.js";
 import Video from "../models/video.js";
@@ -15,6 +16,8 @@ import protect from "../middlewares/middleware.js";
 const router = express.Router();
 
 router.post("/upload", protect, videoUpload);
+
+router.post("/notes", protect, addNotes);
 
 router.route("/private").get(
   protect,
