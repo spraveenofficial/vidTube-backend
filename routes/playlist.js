@@ -24,6 +24,6 @@ router
 router.route("/create").post(createPlaylist);
 router.route("/update/:playlistId").put(updatePlaylist);
 router.route("/addVideo/:playlistId/:videoId").put(addVideo);
-router.route("/delete/:playlistId").delete(deletePlaylist);
+router.route("/delete").delete(deletePlaylist);
 router.route("/delete/:playlistId/:videoId").delete(deleteVideo);
 export default router;

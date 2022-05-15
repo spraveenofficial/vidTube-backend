@@ -69,9 +69,17 @@ const addVideo = async (req, res) => {
 // @access  Private
 
 const deletePlaylist = async (req, res) => {
-  const { playlistId } = req.params;
+  const { id } = req.data;
+  const { playlistId } = req.body;
   try {
-    await Playlist.findByIdAndDelete(playlistId);
+    const playlist = await Playlist.find({
+      _id: playlistId,
+      userId: id,
+    });
+    if (playlist.length === 0) {
+      return res.status(400).send("Playlist does not exist");
+    }
+    await playlist[0].remove();
     res.status(200).send("Playlist deleted");
   } catch (err) {
     res.status(400).send(err);
