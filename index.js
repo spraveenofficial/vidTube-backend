@@ -12,6 +12,7 @@ import feelingRoutes from "./routes/feelings.js";
 import SubscriptionROutes from "./routes/subscription.js";
 import PlayListRoutes from "./routes/playlist.js";
 import HistoryRoutes from "./routes/history.js";
+import WatchLaterRoutes from "./routes/watchlater.js";
 import bodyParser from "body-parser";
 // This is solution for __dirname in ES6
 const __dirname = path.resolve();
@@ -46,6 +47,7 @@ app.use("/v1/api/feelings", feelingRoutes);
 app.use("/v1/api/subscription", SubscriptionROutes);
 app.use("/v1/api/playlist", PlayListRoutes);
 app.use("/v1/api/history", HistoryRoutes);
+app.use("/v1/api/watchlater", WatchLaterRoutes);
 
 // Server initialize
 app.listen(PORT, () => console.log(`App started running on ${PORT}`));

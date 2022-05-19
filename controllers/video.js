@@ -6,6 +6,7 @@ import cloudinary from "cloudinary";
 import Video from "../models/video.js";
 import UploadServices from "../services/upload.js";
 import Notes from "../models/note.js";
+
 cloudinary.config({
   cloud_name: "dtswa0rzu",
   api_key: "635545176889491",

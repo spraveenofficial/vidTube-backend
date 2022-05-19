@@ -5,6 +5,7 @@ import Video from "../models/video.js";
 import Feeling from "../models/feeling.js";
 import Subscription from "../models/subscription.js";
 import Notes from "../models/note.js";
+import WatchLater from "../models/watchlater.js";
 // @desc    Create feeling
 // @route   POST /api/v1/feelings/
 // @access  Private
@@ -74,10 +75,20 @@ const checkFeeling = asyncHandler(async (req, res, next) => {
     userId: id,
     videoId: req.body.videoId,
   }).select("notes");
+
+  const watchLater = await WatchLater.findOne({
+    userId: id,
+    videoId: req.body.videoId,
+  });
   if (!feeling) {
     return res.status(200).json({
       success: true,
-      data: { liked: false, disliked: false, notes: notes ? notes.notes : [] },
+      data: {
+        liked: false,
+        disliked: false,
+        notes: notes ? notes.notes : [],
+        isWatchLatered: watchLater ? true : false,
+      },
     });
   } else {
     const channel = await Subscription.findOne({
@@ -89,6 +100,7 @@ const checkFeeling = asyncHandler(async (req, res, next) => {
       disliked: feeling.type === "dislike",
       isSubscribed: !!channel,
       notes: notes ? notes.notes : [],
+      isWatchLatered: watchLater ? true : false,
     };
     return res.status(200).json({ success: true, data: dataTobeSent });
   }
