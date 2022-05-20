@@ -50,4 +50,21 @@ const getAllWatchLaterVideos = async (req, res) => {
   });
 };
 
-export { addToWatchLater, getAllWatchLaterVideos };
+const deleteEachWatchLaterVideo = async (req, res) => {
+  const { id } = req.data;
+  const { videoId } = req.body;
+  const ifExist = await WatchLater.findOne({ userId: id, videoId: videoId });
+  if (!ifExist) {
+    return res.status(400).json({
+      success: false,
+      message: "Video not found in Watch Later",
+    });
+  }
+  await WatchLater.findOneAndDelete({ userId: id, videoId: videoId });
+  return res.status(200).json({
+    success: true,
+    message: "Successfully Deleted from Watch Later",
+  });
+};
+
+export { addToWatchLater, getAllWatchLaterVideos, deleteEachWatchLaterVideo };
