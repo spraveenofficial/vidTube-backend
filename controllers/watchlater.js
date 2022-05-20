@@ -26,4 +26,28 @@ const addToWatchLater = async (req, res) => {
   });
 };
 
-export { addToWatchLater };
+const getAllWatchLaterVideos = async (req, res) => {
+  const { id } = req.data;
+
+  const watchLaterVideos = await WatchLater.find({ userId: id }).populate(
+    "videoId userId"
+  );
+  if (!watchLaterVideos) {
+    return res.status(400).json({
+      success: true,
+      message: "No watch Later Videos Found.",
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Successfully fetched Watch Later Videos",
+    videos: watchLaterVideos.map((video) => {
+      return {
+        ...video.videoId._doc,
+        userId: video.userId._doc,
+      };
+    }),
+  });
+};
+
+export { addToWatchLater, getAllWatchLaterVideos };
