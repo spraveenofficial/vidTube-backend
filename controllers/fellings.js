@@ -128,4 +128,20 @@ const getLikedVideos = asyncHandler(async (req, res, next) => {
   advanceResultFunction(req, res, Video, populates, "public", videosId);
 });
 
-export { createFeeling, checkFeeling, getLikedVideos };
+const deleteLikedVideo = asyncHandler(async (req, res, next) => {
+  const { id } = req.data;
+  const { videoId } = req.body;
+  const feeling = await Feeling.findOne({
+    videoId,
+    userId: id,
+    type: "like",
+  });
+  if (!feeling) {
+    return res.status(400).json({ success: false, message: "No video found" });
+  }
+  await feeling.remove();
+  return res
+    .status(200)
+    .json({ success: true, message: "Successfully Deleted Liked Video" });
+});
+export { createFeeling, checkFeeling, getLikedVideos, deleteLikedVideo };

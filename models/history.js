@@ -12,6 +12,8 @@ const HistorySchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Video",
+      // Add timestamp to each video object
+      timestamps: true,
     },
   ],
 });
