@@ -53,11 +53,11 @@ const deleteHistory = async (req, res) => {
 
 const deleteHistoryVideo = async (req, res) => {
   const { id } = req.data;
-  const { video } = req.body;
+  const { videoId } = req.body;
   try {
     const history = await History.findOneAndUpdate(
       { user: id },
-      { $pull: { videos: video } },
+      { $pull: { videos: videoId } },
       { new: true }
     );
     res.status(200).json(history);
