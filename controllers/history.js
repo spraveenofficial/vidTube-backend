@@ -51,4 +51,19 @@ const deleteHistory = async (req, res) => {
   }
 };
 
-export { createHistory, fetchHistory, deleteHistory };
+const deleteHistoryVideo = async (req, res) => {
+  const { id } = req.data;
+  const { video } = req.body;
+  try {
+    const history = await History.findOneAndUpdate(
+      { user: id },
+      { $pull: { videos: video } },
+      { new: true }
+    );
+    res.status(200).json(history);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export { createHistory, fetchHistory, deleteHistory, deleteHistoryVideo };

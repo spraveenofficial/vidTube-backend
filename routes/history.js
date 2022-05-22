@@ -5,6 +5,7 @@ import {
   createHistory,
   deleteHistory,
   fetchHistory,
+  deleteHistoryVideo,
 } from "../controllers/history.js";
 import advancedResults from "../middlewares/advanceresult.js";
 import History from "../models/history.js";
@@ -20,4 +21,5 @@ router
     fetchHistory
   );
 router.route("/").delete(deleteHistory);
+router.route("/remove").delete(deleteHistoryVideo);
 export default router;
