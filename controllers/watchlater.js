@@ -1,4 +1,4 @@
-import WatchLater from "../models/watchlater.js";
+import WatchLater from "../models/watchLater.js";
 
 const addToWatchLater = async (req, res) => {
   const { id } = req.data;

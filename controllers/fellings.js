@@ -5,7 +5,7 @@ import Video from "../models/video.js";
 import Feeling from "../models/feeling.js";
 import Subscription from "../models/subscription.js";
 import Notes from "../models/note.js";
-import WatchLater from "../models/watchlater.js";
+import WatchLater from "../models/watchLater.js";
 // @desc    Create feeling
 // @route   POST /api/v1/feelings/
 // @access  Private
