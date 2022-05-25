@@ -22,6 +22,10 @@ const createHistory = async (req, res) => {
       { $push: { videos: video } },
       { new: true }
     );
+    // Push timestamp to video object in history
+    const videoIndex = history.videos.findIndex((video) => video === video);
+    history.videos[videoIndex].timestamp = Date.now();
+    history.save();
     res.status(201).send(history);
   } else {
     const createHistory = new History({
